@@ -1,0 +1,107 @@
+{
+  "app": {
+    "window_size": [3840, 1080],
+    "left_resolution": [1920, 1080],
+    "right_resolution": [1920, 1080],
+    "fullscreen": false,
+    "config_search_paths": [
+      "user://installation_config.json",
+      "res://config/installation_config.json"
+    ]
+  },
+  "left": {
+    "background_color": "#0f1d34",
+    "main_menu": {
+      "title": "Choose the blessings for your lantern",
+      "character": {
+        "position": [1510, 710],
+        "scale": [1.0, 1.0],
+        "fps": 3.0,
+        "frames": []
+      },
+      "menu_buttons": [
+        { "id": "peace", "label": "Peace", "position": [170, 190], "size": [280, 110], "oscillation": [16, 9], "speed": 0.9 },
+        { "id": "hope", "label": "Hope", "position": [500, 210], "size": [280, 110], "oscillation": [14, 8], "speed": 1.0 },
+        { "id": "joy", "label": "Joy", "position": [830, 190], "size": [280, 110], "oscillation": [18, 10], "speed": 1.1 },
+        { "id": "healing", "label": "Healing", "position": [1160, 220], "size": [280, 110], "oscillation": [15, 7], "speed": 1.0 },
+        { "id": "gratitude", "label": "Gratitude", "position": [170, 390], "size": [280, 110], "oscillation": [13, 8], "speed": 1.1 },
+        { "id": "courage", "label": "Courage", "position": [500, 410], "size": [280, 110], "oscillation": [17, 9], "speed": 0.95 },
+        { "id": "wonder", "label": "Wonder", "position": [830, 390], "size": [280, 110], "oscillation": [14, 10], "speed": 1.05 },
+        { "id": "dreams", "label": "Dreams", "position": [1160, 415], "size": [280, 110], "oscillation": [16, 8], "speed": 1.0 }
+      ],
+      "confirm_button": {
+        "label": "Confirm",
+        "position": [1450, 905],
+        "size": [300, 110]
+      }
+    },
+    "drawing": {
+      "title": "Draw your lantern wish",
+      "board": {
+        "position": [140, 170],
+        "size": [1120, 700],
+        "line_width": 9,
+        "line_color": "#fff4dd",
+        "background_color": "#10263f",
+        "border_color": "#84c9ff"
+      },
+      "character": {
+        "position": [1510, 710],
+        "scale": [1.0, 1.0],
+        "fps": 3.0,
+        "frames": []
+      },
+      "confirm_button": {
+        "label": "Confirm",
+        "position": [1450, 890],
+        "size": [300, 110]
+      },
+      "clear_button": {
+        "label": "Clear",
+        "position": [1110, 890],
+        "size": [260, 110]
+      }
+    },
+    "completion": {
+      "title": "Share your lantern",
+      "back_button": {
+        "label": "Back to Main Menu",
+        "position": [140, 890],
+        "size": [360, 110]
+      },
+      "screenshot_button": {
+        "label": "Screenshot",
+        "position": [540, 890],
+        "size": [300, 110]
+      },
+      "qr_display": {
+        "position": [1280, 240],
+        "size": [360, 360],
+        "caption": "Scan after saving the right screen"
+      }
+    }
+  },
+  "right": {
+    "background_carousel": {
+      "paths": [],
+      "hold_seconds": 5.0,
+      "transition_seconds": 1.2
+    },
+    "lanterns": {
+      "count": 12,
+      "default_texture_path": "",
+      "drift_direction": [12, -8],
+      "drift_speed_range": [16, 40],
+      "oscillation_amplitude": [30, 18],
+      "oscillation_speed_range": [0.5, 1.2],
+      "min_scale": 0.45,
+      "max_scale": 1.1
+    }
+  },
+  "sharing": {
+    "link_prefix": "sc://",
+    "id_length": 6,
+    "captures_dir": "user://captures",
+    "manifest_file": "user://captures/index.json"
+  }
+}
