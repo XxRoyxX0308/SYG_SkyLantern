@@ -5,15 +5,15 @@ const ConfigLoader = preload("res://scripts/core/config_loader.gd")
 
 signal drawing_changed(has_content)
 
-var board_background_color := Color.from_string("#10263f", Color(0.06, 0.15, 0.25, 1.0))
-var border_color := Color.from_string("#84c9ff", Color(0.52, 0.79, 1.0, 1.0))
-var stroke_color := Color.from_string("#fff4dd", Color.WHITE)
-var line_width := 8
+var board_background_color: Color = Color.from_string("#10263f", Color(0.06, 0.15, 0.25, 1.0))
+var border_color: Color = Color.from_string("#84c9ff", Color(0.52, 0.79, 1.0, 1.0))
+var stroke_color: Color = Color.from_string("#fff4dd", Color.WHITE)
+var line_width: int = 8
 
 var _canvas_image: Image
 var _canvas_texture: Texture2D
-var _last_point := Vector2.ZERO
-var _is_drawing := false
+var _last_point: Vector2 = Vector2.ZERO
+var _is_drawing: bool = false
 
 
 func _ready() -> void:
@@ -28,7 +28,7 @@ func configure(board_config: Dictionary) -> void:
 	board_background_color = ConfigLoader.color_from(board_config.get("background_color"), board_background_color)
 	border_color = ConfigLoader.color_from(board_config.get("border_color"), border_color)
 	stroke_color = ConfigLoader.color_from(board_config.get("line_color"), stroke_color)
-	line_width = max(1, ConfigLoader.int_from(board_config.get("line_width"), line_width))
+	line_width = maxi(1, ConfigLoader.int_from(board_config.get("line_width"), line_width))
 	_ensure_canvas()
 	clear_canvas()
 
@@ -91,7 +91,7 @@ func _draw() -> void:
 
 
 func _ensure_canvas() -> void:
-	var canvas_size := Vector2i(max(1, int(round(size.x))), max(1, int(round(size.y))))
+	var canvas_size: Vector2i = Vector2i(maxi(1, int(round(size.x))), maxi(1, int(round(size.y))))
 	if _canvas_image == null or _canvas_image.get_size() != canvas_size:
 		_canvas_image = Image.create_empty(canvas_size.x, canvas_size.y, false, Image.FORMAT_RGBA8)
 		_canvas_image.fill(Color(1.0, 1.0, 1.0, 0.0))
@@ -99,21 +99,21 @@ func _ensure_canvas() -> void:
 
 
 func _draw_segment(start_point: Vector2, end_point: Vector2) -> void:
-	var distance := start_point.distance_to(end_point)
-	var steps := max(int(distance / max(float(line_width) * 0.35, 1.0)), 1)
+	var distance: float = start_point.distance_to(end_point)
+	var steps: int = maxi(int(distance / maxf(float(line_width) * 0.35, 1.0)), 1)
 	for index in range(steps + 1):
-		var point := start_point.lerp(end_point, float(index) / float(steps))
+		var point: Vector2 = start_point.lerp(end_point, float(index) / float(steps))
 		_stamp_at(point)
 
 
 func _stamp_at(point: Vector2) -> void:
-	var radius := max(1, int(round(float(line_width) * 0.5)))
-	var center := Vector2i(int(round(point.x)), int(round(point.y)))
+	var radius: int = maxi(1, int(round(float(line_width) * 0.5)))
+	var center: Vector2i = Vector2i(int(round(point.x)), int(round(point.y)))
 	for y_offset in range(-radius, radius + 1):
 		for x_offset in range(-radius, radius + 1):
 			if x_offset * x_offset + y_offset * y_offset > radius * radius:
 				continue
-			var pixel := center + Vector2i(x_offset, y_offset)
+			var pixel: Vector2i = center + Vector2i(x_offset, y_offset)
 			if pixel.x < 0 or pixel.y < 0 or pixel.x >= _canvas_image.get_width() or pixel.y >= _canvas_image.get_height():
 				continue
 			_canvas_image.set_pixelv(pixel, stroke_color)

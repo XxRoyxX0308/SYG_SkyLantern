@@ -10,9 +10,9 @@ config_version=5
 
 [application]
 
-config/name="SkyCanvas"
-config/features=PackedStringArray("4.6", "GL Compatibility")
+config/name="SYG_SkyLantern"
 run/main_scene="res://scenes/installation_app.tscn"
+config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [display]

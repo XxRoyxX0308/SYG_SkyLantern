@@ -2,12 +2,12 @@ extends RefCounted
 class_name ConfigLoader
 
 static func load_installation_config() -> Dictionary:
-	var search_paths := [
+	var search_paths: Array[String] = [
 		"user://installation_config.json",
 		"res://config/installation_config.json"
 	]
 	for path in search_paths:
-		var data := _read_json_file(path)
+		var data: Dictionary = _read_json_file(path)
 		if not data.is_empty():
 			return data
 	return {}
@@ -16,10 +16,10 @@ static func load_installation_config() -> Dictionary:
 static func _read_json_file(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
 		return {}
-	var file := FileAccess.open(path, FileAccess.READ)
+	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
 	if file == null:
 		return {}
-	var parser := JSON.new()
+	var parser: JSON = JSON.new()
 	if parser.parse(file.get_as_text()) != OK:
 		return {}
 	if not (parser.data is Dictionary):
@@ -69,7 +69,7 @@ static func bool_from(value: Variant, default_value: bool = false) -> bool:
 	if value is bool:
 		return value
 	if value is String:
-		var lower := value.to_lower()
+		var lower: String = value.to_lower()
 		if lower == "true":
 			return true
 		if lower == "false":

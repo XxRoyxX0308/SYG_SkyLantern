@@ -11,8 +11,10 @@ var _lantern_manager: LanternManager
 func configure(right_config: Dictionary, stage_size: Vector2i) -> void:
 	if _background_carousel == null:
 		_build_scene()
-	_background_carousel.configure(ConfigLoader.dictionary_from(right_config.get("background_carousel", {})), stage_size)
-	_lantern_manager.configure(ConfigLoader.dictionary_from(right_config.get("lanterns", {})), stage_size)
+	var background_config: Dictionary = ConfigLoader.dictionary_from(right_config.get("background_carousel", {}))
+	var lantern_config: Dictionary = ConfigLoader.dictionary_from(right_config.get("lanterns", {}))
+	_background_carousel.configure(background_config, stage_size)
+	_lantern_manager.configure(lantern_config, stage_size)
 
 
 func add_user_lantern(texture: Texture2D) -> void:

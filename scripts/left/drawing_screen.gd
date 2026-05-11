@@ -20,11 +20,11 @@ func configure(screen_config: Dictionary, stage_size: Vector2i) -> void:
 	size = Vector2(stage_size)
 	_title_label.text = ConfigLoader.string_from(screen_config.get("title"), "Draw your lantern wish")
 	_drawing_board.configure(ConfigLoader.dictionary_from(screen_config.get("board", {})))
-	var confirm_config := ConfigLoader.dictionary_from(screen_config.get("confirm_button", {}))
+	var confirm_config: Dictionary = ConfigLoader.dictionary_from(screen_config.get("confirm_button", {}))
 	_confirm_button.text = ConfigLoader.string_from(confirm_config.get("label"), "Confirm")
 	_confirm_button.position = ConfigLoader.vector2_from(confirm_config.get("position"), Vector2(1450, 890))
 	_confirm_button.size = ConfigLoader.vector2_from(confirm_config.get("size"), Vector2(300, 110))
-	var clear_config := ConfigLoader.dictionary_from(screen_config.get("clear_button", {}))
+	var clear_config: Dictionary = ConfigLoader.dictionary_from(screen_config.get("clear_button", {}))
 	_clear_button.text = ConfigLoader.string_from(clear_config.get("label"), "Clear")
 	_clear_button.position = ConfigLoader.vector2_from(clear_config.get("position"), Vector2(1110, 890))
 	_clear_button.size = ConfigLoader.vector2_from(clear_config.get("size"), Vector2(260, 110))
@@ -82,7 +82,7 @@ func _on_clear_pressed() -> void:
 
 
 func _apply_action_button_style(button: Button, color: Color) -> void:
-	var normal := StyleBoxFlat.new()
+	var normal: StyleBoxFlat = StyleBoxFlat.new()
 	normal.bg_color = color
 	normal.corner_radius_top_left = 24
 	normal.corner_radius_top_right = 24
@@ -93,9 +93,9 @@ func _apply_action_button_style(button: Button, color: Color) -> void:
 	normal.border_width_right = 2
 	normal.border_width_bottom = 2
 	normal.border_color = Color.from_string("#eef8ff", Color.WHITE)
-	var hover := normal.duplicate()
+	var hover: StyleBoxFlat = normal.duplicate() as StyleBoxFlat
 	hover.bg_color = color.lightened(0.08)
-	var pressed := normal.duplicate()
+	var pressed: StyleBoxFlat = normal.duplicate() as StyleBoxFlat
 	pressed.bg_color = color.darkened(0.12)
 	button.add_theme_stylebox_override("normal", normal)
 	button.add_theme_stylebox_override("hover", hover)

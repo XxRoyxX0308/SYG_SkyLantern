@@ -9,7 +9,7 @@ signal confirmed(selected_ids)
 var _title_label: Label
 var _buttons_root: Control
 var _confirm_button: Button
-var _option_buttons := {}
+var _option_buttons: Dictionary = {}
 
 
 func configure(screen_config: Dictionary, stage_size: Vector2i) -> void:
@@ -21,13 +21,13 @@ func configure(screen_config: Dictionary, stage_size: Vector2i) -> void:
 	for child in _buttons_root.get_children():
 		child.free()
 	_option_buttons.clear()
-	var button_configs := ConfigLoader.array_from(screen_config.get("menu_buttons"), [])
+	var button_configs: Array = ConfigLoader.array_from(screen_config.get("menu_buttons"), [])
 	for index in range(button_configs.size()):
-		var button := FloatingButtonScene.new()
+		var button: FloatingButton = FloatingButtonScene.new()
 		button.configure(ConfigLoader.dictionary_from(button_configs[index]), "Option %d" % [index + 1])
 		_buttons_root.add_child(button)
 		_option_buttons[button] = ConfigLoader.string_from(button_configs[index].get("id"), "option_%d" % [index + 1])
-	var confirm_config := ConfigLoader.dictionary_from(screen_config.get("confirm_button"), {})
+	var confirm_config: Dictionary = ConfigLoader.dictionary_from(screen_config.get("confirm_button"), {})
 	_confirm_button.text = ConfigLoader.string_from(confirm_config.get("label"), "Confirm")
 	_confirm_button.position = ConfigLoader.vector2_from(confirm_config.get("position"), Vector2(1450, 905))
 	_confirm_button.size = ConfigLoader.vector2_from(confirm_config.get("size"), Vector2(300, 110))
@@ -59,7 +59,7 @@ func _build_ui() -> void:
 
 
 func _on_confirm_pressed() -> void:
-	var selected_ids := []
+	var selected_ids: Array[String] = []
 	for button in _option_buttons.keys():
 		if button.button_pressed:
 			selected_ids.append(_option_buttons[button])
@@ -67,7 +67,7 @@ func _on_confirm_pressed() -> void:
 
 
 func _apply_action_button_style(button: Button, color: Color) -> void:
-	var normal := StyleBoxFlat.new()
+	var normal: StyleBoxFlat = StyleBoxFlat.new()
 	normal.bg_color = color
 	normal.corner_radius_top_left = 24
 	normal.corner_radius_top_right = 24
@@ -78,9 +78,9 @@ func _apply_action_button_style(button: Button, color: Color) -> void:
 	normal.border_width_right = 2
 	normal.border_width_bottom = 2
 	normal.border_color = Color.from_string("#fff4d6", Color(1.0, 0.96, 0.84, 1.0))
-	var hover := normal.duplicate()
+	var hover: StyleBoxFlat = normal.duplicate() as StyleBoxFlat
 	hover.bg_color = color.lightened(0.08)
-	var pressed := normal.duplicate()
+	var pressed: StyleBoxFlat = normal.duplicate() as StyleBoxFlat
 	pressed.bg_color = color.darkened(0.12)
 	button.add_theme_stylebox_override("normal", normal)
 	button.add_theme_stylebox_override("hover", hover)

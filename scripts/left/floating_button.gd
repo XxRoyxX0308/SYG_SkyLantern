@@ -3,10 +3,10 @@ class_name FloatingButton
 
 const ConfigLoader = preload("res://scripts/core/config_loader.gd")
 
-var _base_position := Vector2.ZERO
-var _oscillation := Vector2(12.0, 8.0)
-var _speed := 1.0
-var _phase := 0.0
+var _base_position: Vector2 = Vector2.ZERO
+var _oscillation: Vector2 = Vector2(12.0, 8.0)
+var _speed: float = 1.0
+var _phase: float = 0.0
 
 
 func _ready() -> void:
@@ -37,7 +37,7 @@ func _process(delta: float) -> void:
 
 
 func _apply_styles() -> void:
-	var normal := StyleBoxFlat.new()
+	var normal: StyleBoxFlat = StyleBoxFlat.new()
 	normal.bg_color = Color.from_string("#17355b", Color(0.09, 0.21, 0.36, 1.0))
 	normal.corner_radius_top_left = 24
 	normal.corner_radius_top_right = 24
@@ -48,9 +48,9 @@ func _apply_styles() -> void:
 	normal.border_width_right = 2
 	normal.border_width_bottom = 2
 	normal.border_color = Color.from_string("#8fd1ff", Color(0.56, 0.82, 1.0, 1.0))
-	var hover := normal.duplicate()
+	var hover: StyleBoxFlat = normal.duplicate() as StyleBoxFlat
 	hover.bg_color = Color.from_string("#214b7a", Color(0.13, 0.29, 0.48, 1.0))
-	var pressed := normal.duplicate()
+	var pressed: StyleBoxFlat = normal.duplicate() as StyleBoxFlat
 	pressed.bg_color = Color.from_string("#f0b75d", Color(0.94, 0.72, 0.36, 1.0))
 	pressed.border_color = Color.from_string("#ffe8c4", Color(1.0, 0.91, 0.77, 1.0))
 	add_theme_stylebox_override("normal", normal)

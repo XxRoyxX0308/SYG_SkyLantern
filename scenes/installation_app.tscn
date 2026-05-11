@@ -1,10 +1,10 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene format=3 uid="uid://65qb3ecjbpkc"]
 
-[ext_resource type="Script" path="res://scripts/core/installation_app.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/left/left_stage.gd" id="2"]
-[ext_resource type="Script" path="res://scripts/right/right_stage.gd" id="3"]
+[ext_resource type="Script" uid="uid://dhhh2boura6ta" path="res://scripts/core/installation_app.gd" id="1"]
+[ext_resource type="Script" uid="uid://b8rp0gqj81ctq" path="res://scripts/left/left_stage.gd" id="2"]
+[ext_resource type="Script" uid="uid://bgdb0b6utje74" path="res://scripts/right/right_stage.gd" id="3"]
 
-[node name="InstallationApp" type="Control"]
+[node name="InstallationApp" type="Control" unique_id=212139146]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,28 +13,33 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
 
-[node name="LeftViewportContainer" type="SubViewportContainer" parent="."]
+[node name="LeftViewportContainer" type="SubViewportContainer" parent="." unique_id=1414110664]
 layout_mode = 0
-offset_right = 1920.0
-offset_bottom = 1080.0
+offset_left = -324.0
+offset_top = -881.0
+offset_right = 1596.0
+offset_bottom = 199.0
 stretch = true
 
-[node name="LeftViewport" type="SubViewport" parent="LeftViewportContainer"]
+[node name="LeftViewport" type="SubViewport" parent="LeftViewportContainer" unique_id=455312897]
+handle_input_locally = false
 size = Vector2i(1920, 1080)
-handle_input_locally = true
+render_target_update_mode = 4
 
-[node name="LeftStage" type="Node2D" parent="LeftViewport"]
+[node name="LeftViewport#LeftStage" type="Node2D" parent="." unique_id=1364587805]
 script = ExtResource("2")
 
-[node name="RightViewportContainer" type="SubViewportContainer" parent="."]
+[node name="RightViewportContainer" type="SubViewportContainer" parent="." unique_id=1137549445]
 layout_mode = 0
 offset_left = 1920.0
 offset_right = 3840.0
 offset_bottom = 1080.0
 stretch = true
 
-[node name="RightViewport" type="SubViewport" parent="RightViewportContainer"]
+[node name="RightViewport" type="SubViewport" parent="RightViewportContainer" unique_id=1119458407]
+handle_input_locally = false
 size = Vector2i(1920, 1080)
+render_target_update_mode = 4
 
-[node name="RightStage" type="Node2D" parent="RightViewport"]
+[node name="RightViewport#RightStage" type="Node2D" parent="." unique_id=1498172390]
 script = ExtResource("3")

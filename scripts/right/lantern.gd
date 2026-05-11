@@ -4,16 +4,16 @@ class_name Lantern
 const ConfigLoader = preload("res://scripts/core/config_loader.gd")
 
 var _sprite: Sprite2D
-var _viewport_size := Vector2.ZERO
-var _anchor_position := Vector2.ZERO
-var _drift_velocity := Vector2.ZERO
-var _oscillation_amplitude := Vector2.ZERO
-var _oscillation_speed := 1.0
-var _phase := 0.0
-var _elapsed := 0.0
-var _travel := Vector2.ZERO
-var _margin := 220.0
-var _rng := RandomNumberGenerator.new()
+var _viewport_size: Vector2 = Vector2.ZERO
+var _anchor_position: Vector2 = Vector2.ZERO
+var _drift_velocity: Vector2 = Vector2.ZERO
+var _oscillation_amplitude: Vector2 = Vector2.ZERO
+var _oscillation_speed: float = 1.0
+var _phase: float = 0.0
+var _elapsed: float = 0.0
+var _travel: Vector2 = Vector2.ZERO
+var _margin: float = 220.0
+var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 
 func _ready() -> void:
@@ -41,8 +41,8 @@ func configure(texture: Texture2D, viewport_size: Vector2i, lantern_config: Dict
 
 
 func set_display_depth(rank: int, total: int, min_scale: float, max_scale: float) -> void:
-	var factor := 1.0 if total <= 1 else float(rank) / float(total - 1)
-	var display_scale := lerpf(min_scale, max_scale, factor)
+	var factor: float = 1.0 if total <= 1 else float(rank) / float(total - 1)
+	var display_scale: float = lerpf(min_scale, max_scale, factor)
 	scale = Vector2.ONE * display_scale
 	z_index = rank
 
@@ -51,7 +51,7 @@ func _process(delta: float) -> void:
 	_elapsed += delta
 	_travel += _drift_velocity * delta
 	_wrap_if_needed()
-	var oscillation := Vector2(
+	var oscillation: Vector2 = Vector2(
 		sin(_phase + _elapsed * _oscillation_speed) * _oscillation_amplitude.x,
 		cos(_phase * 0.7 + _elapsed * _oscillation_speed * 1.15) * _oscillation_amplitude.y
 	)
@@ -59,8 +59,8 @@ func _process(delta: float) -> void:
 
 
 func _wrap_if_needed() -> void:
-	var base_position := _anchor_position + _travel
-	var wrapped := false
+	var base_position: Vector2 = _anchor_position + _travel
+	var wrapped: bool = false
 	if _drift_velocity.x >= 0.0 and base_position.x > _viewport_size.x + _margin:
 		_anchor_position.x = -_margin
 		_travel.x = 0.0

@@ -11,8 +11,8 @@ signal drawing_confirmed(drawing_image)
 signal screenshot_requested
 signal back_to_main_menu_requested
 
-var _config := {}
-var _stage_size := Vector2i(1920, 1080)
+var _config: Dictionary = {}
+var _stage_size: Vector2i = Vector2i(1920, 1080)
 var _character: SequenceAnimator
 var _canvas_layer: CanvasLayer
 var _background: ColorRect
@@ -86,8 +86,8 @@ func _build_scene() -> void:
 
 
 func _apply_character_config(state_name: String) -> void:
-	var screen_config := ConfigLoader.dictionary_from(_config.get(state_name, {}))
-	var character_config := ConfigLoader.dictionary_from(screen_config.get("character", {}))
+	var screen_config: Dictionary = ConfigLoader.dictionary_from(_config.get(state_name, {}))
+	var character_config: Dictionary = ConfigLoader.dictionary_from(screen_config.get("character", {}))
 	if character_config.is_empty() and state_name == "completion":
 		_character.visible = false
 		return

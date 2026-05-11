@@ -4,14 +4,14 @@ class_name PlaceholderFactory
 
 static func load_texture(path: String, fallback: Texture2D = null) -> Texture2D:
 	if not path.is_empty():
-		var resource := load(path)
+		var resource: Resource = load(path)
 		if resource is Texture2D:
 			return resource
 	return fallback
 
 
 static func make_background_texture(size: Vector2i, palette_index: int = 0) -> Texture2D:
-	var palettes := [
+	var palettes: Array[Dictionary] = [
 		{
 			"top": "#10213f",
 			"bottom": "#41679a",
@@ -37,10 +37,10 @@ static func make_background_texture(size: Vector2i, palette_index: int = 0) -> T
 			"hill": "#12303c"
 		}
 	]
-	var palette := palettes[wrapi(palette_index, 0, palettes.size())]
-	var sun_x := int(size.x * (0.18 + 0.24 * float(palette_index % 3)))
-	var sun_y := int(size.y * (0.18 + 0.06 * float(palette_index % 2)))
-	var svg := """
+	var palette: Dictionary = palettes[wrapi(palette_index, 0, palettes.size())]
+	var sun_x: int = int(size.x * (0.18 + 0.24 * float(palette_index % 3)))
+	var sun_y: int = int(size.y * (0.18 + 0.06 * float(palette_index % 2)))
+	var svg: String = """
 <svg xmlns="http://www.w3.org/2000/svg" width="%d" height="%d" viewBox="0 0 %d %d">
   <defs>
     <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
@@ -103,7 +103,7 @@ static func make_background_texture(size: Vector2i, palette_index: int = 0) -> T
 
 
 static func make_character_frames(frame_count: int = 4, size: Vector2i = Vector2i(360, 360)) -> Array:
-	var textures := []
+	var textures: Array[Texture2D] = []
 	for frame_index in range(max(frame_count, 1)):
 		textures.append(_texture_from_svg(_character_svg(size, frame_index), size))
 	return textures
@@ -114,25 +114,25 @@ static func make_lantern_texture(size: Vector2i = Vector2i(512, 768), accent: St
 
 
 static func compose_user_lantern(drawing_image: Image, size: Vector2i = Vector2i(512, 768)) -> Texture2D:
-	var base_image := _image_from_svg(_lantern_svg(size, "#ffd27a"), size)
+	var base_image: Image = _image_from_svg(_lantern_svg(size, "#ffd27a"), size)
 	if drawing_image == null or drawing_image.is_empty() or drawing_image.is_invisible():
 		return ImageTexture.create_from_image(base_image)
-	var working := drawing_image.get_region(drawing_image.get_used_rect())
+	var working: Image = drawing_image.get_region(drawing_image.get_used_rect())
 	if working.is_empty():
 		working = drawing_image
 	if working.get_format() != Image.FORMAT_RGBA8:
 		working.convert(Image.FORMAT_RGBA8)
-	var panel_rect := Rect2i(
+	var panel_rect: Rect2i = Rect2i(
 		int(size.x * 0.28),
 		int(size.y * 0.28),
 		int(size.x * 0.44),
 		int(size.y * 0.34)
 	)
-	var target_size := _fit_size(working.get_size(), panel_rect.size)
+	var target_size: Vector2i = _fit_size(working.get_size(), panel_rect.size)
 	working.resize(target_size.x, target_size.y, Image.INTERPOLATE_LANCZOS)
-	var panel_image := Image.create_empty(panel_rect.size.x, panel_rect.size.y, false, Image.FORMAT_RGBA8)
+	var panel_image: Image = Image.create_empty(panel_rect.size.x, panel_rect.size.y, false, Image.FORMAT_RGBA8)
 	panel_image.fill(Color(1.0, 1.0, 1.0, 0.0))
-	var draw_position := Vector2i(
+	var draw_position: Vector2i = Vector2i(
 		(panel_rect.size.x - target_size.x) / 2,
 		(panel_rect.size.y - target_size.y) / 2
 	)
@@ -142,13 +142,13 @@ static func compose_user_lantern(drawing_image: Image, size: Vector2i = Vector2i
 
 
 static func _texture_from_svg(svg: String, size: Vector2i) -> Texture2D:
-	var image := _image_from_svg(svg, size)
+	var image: Image = _image_from_svg(svg, size)
 	return ImageTexture.create_from_image(image)
 
 
 static func _image_from_svg(svg: String, size: Vector2i) -> Image:
-	var image := Image.new()
-	var error := image.load_svg_from_string(svg, 1.0)
+	var image: Image = Image.new()
+	var error: int = image.load_svg_from_string(svg, 1.0)
 	if error != OK:
 		image = Image.create_empty(max(size.x, 1), max(size.y, 1), false, Image.FORMAT_RGBA8)
 		image.fill(Color(0.20, 0.24, 0.32, 1.0))
@@ -159,9 +159,9 @@ static func _image_from_svg(svg: String, size: Vector2i) -> Image:
 
 
 static func _fit_size(source_size: Vector2i, bounds: Vector2i) -> Vector2i:
-	var width := max(source_size.x, 1)
-	var height := max(source_size.y, 1)
-	var scale := min(float(bounds.x) / float(width), float(bounds.y) / float(height))
+	var width: int = maxi(source_size.x, 1)
+	var height: int = maxi(source_size.y, 1)
+	var scale: float = minf(float(bounds.x) / float(width), float(bounds.y) / float(height))
 	return Vector2i(
 		max(1, int(round(width * scale))),
 		max(1, int(round(height * scale)))
@@ -169,8 +169,8 @@ static func _fit_size(source_size: Vector2i, bounds: Vector2i) -> Vector2i:
 
 
 static func _character_svg(size: Vector2i, frame_index: int) -> String:
-	var bob := [-6, -12, -4, 6][frame_index % 4]
-	var sway := [-14, -6, 8, 16][frame_index % 4]
+	var bob: int = [-6, -12, -4, 6][frame_index % 4]
+	var sway: int = [-14, -6, 8, 16][frame_index % 4]
 	return """
 <svg xmlns="http://www.w3.org/2000/svg" width="%d" height="%d" viewBox="0 0 %d %d">
   <ellipse cx="%d" cy="%d" rx="78" ry="24" fill="#88c9ff" fill-opacity="0.16"/>

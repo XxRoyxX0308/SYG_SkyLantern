@@ -22,15 +22,15 @@ func configure(screen_config: Dictionary, stage_size: Vector2i) -> void:
 	position = Vector2.ZERO
 	size = Vector2(stage_size)
 	_title_label.text = ConfigLoader.string_from(screen_config.get("title"), "Share your lantern")
-	var back_config := ConfigLoader.dictionary_from(screen_config.get("back_button", {}))
+	var back_config: Dictionary = ConfigLoader.dictionary_from(screen_config.get("back_button", {}))
 	_back_button.text = ConfigLoader.string_from(back_config.get("label"), "Back to Main Menu")
 	_back_button.position = ConfigLoader.vector2_from(back_config.get("position"), Vector2(140, 890))
 	_back_button.size = ConfigLoader.vector2_from(back_config.get("size"), Vector2(360, 110))
-	var screenshot_config := ConfigLoader.dictionary_from(screen_config.get("screenshot_button", {}))
+	var screenshot_config: Dictionary = ConfigLoader.dictionary_from(screen_config.get("screenshot_button", {}))
 	_screenshot_button.text = ConfigLoader.string_from(screenshot_config.get("label"), "Screenshot")
 	_screenshot_button.position = ConfigLoader.vector2_from(screenshot_config.get("position"), Vector2(540, 890))
 	_screenshot_button.size = ConfigLoader.vector2_from(screenshot_config.get("size"), Vector2(300, 110))
-	var qr_config := ConfigLoader.dictionary_from(screen_config.get("qr_display", {}))
+	var qr_config: Dictionary = ConfigLoader.dictionary_from(screen_config.get("qr_display", {}))
 	_qr_rect.position = ConfigLoader.vector2_from(qr_config.get("position"), Vector2(1280, 240))
 	_qr_rect.size = ConfigLoader.vector2_from(qr_config.get("size"), Vector2(360, 360))
 	_caption_label.text = ConfigLoader.string_from(qr_config.get("caption"), "Scan after saving the right screen")
@@ -45,7 +45,7 @@ func set_summary(selected_ids: Array) -> void:
 	if selected_ids.is_empty():
 		_summary_label.text = "Your new lantern is now floating on the right screen."
 		return
-	var labels := []
+	var labels: Array[String] = []
 	for selected_id in selected_ids:
 		labels.append(str(selected_id).capitalize())
 	_summary_label.text = "Selections: %s" % ", ".join(labels)
@@ -60,8 +60,8 @@ func clear_share_result() -> void:
 func show_share_result(result: Dictionary) -> void:
 	_qr_rect.texture = result.get("qr_texture")
 	_link_label.text = ConfigLoader.string_from(result.get("payload"), "")
-	var saved_path := ConfigLoader.string_from(result.get("path"), "")
-	var error_message := ConfigLoader.string_from(result.get("error"), "")
+	var saved_path: String = ConfigLoader.string_from(result.get("path"), "")
+	var error_message: String = ConfigLoader.string_from(result.get("error"), "")
 	if not error_message.is_empty():
 		_status_label.text = "%s Saved: %s" % [error_message, saved_path]
 	else:
@@ -121,7 +121,7 @@ func _build_ui() -> void:
 
 
 func _apply_action_button_style(button: Button, color: Color) -> void:
-	var normal := StyleBoxFlat.new()
+	var normal: StyleBoxFlat = StyleBoxFlat.new()
 	normal.bg_color = color
 	normal.corner_radius_top_left = 24
 	normal.corner_radius_top_right = 24
@@ -132,9 +132,9 @@ func _apply_action_button_style(button: Button, color: Color) -> void:
 	normal.border_width_right = 2
 	normal.border_width_bottom = 2
 	normal.border_color = Color.from_string("#eef8ff", Color.WHITE)
-	var hover := normal.duplicate()
+	var hover: StyleBoxFlat = normal.duplicate() as StyleBoxFlat
 	hover.bg_color = color.lightened(0.08)
-	var pressed := normal.duplicate()
+	var pressed: StyleBoxFlat = normal.duplicate() as StyleBoxFlat
 	pressed.bg_color = color.darkened(0.12)
 	button.add_theme_stylebox_override("normal", normal)
 	button.add_theme_stylebox_override("hover", hover)

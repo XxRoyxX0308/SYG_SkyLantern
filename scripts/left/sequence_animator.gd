@@ -10,16 +10,16 @@ func apply_config(animation_config: Dictionary) -> void:
 	position = ConfigLoader.vector2_from(animation_config.get("position"), Vector2(1510, 710))
 	scale = ConfigLoader.vector2_from(animation_config.get("scale"), Vector2.ONE)
 	z_index = ConfigLoader.int_from(animation_config.get("z_index"), 1)
-	var fps := ConfigLoader.float_from(animation_config.get("fps"), 3.0)
-	var frame_paths := ConfigLoader.array_from(animation_config.get("frames"), [])
-	var textures := []
+	var fps: float = ConfigLoader.float_from(animation_config.get("fps"), 3.0)
+	var frame_paths: Array = ConfigLoader.array_from(animation_config.get("frames"), [])
+	var textures: Array = []
 	for path in frame_paths:
-		var texture := PlaceholderFactory.load_texture(ConfigLoader.string_from(path), null)
+		var texture: Texture2D = PlaceholderFactory.load_texture(ConfigLoader.string_from(path), null)
 		if texture != null:
 			textures.append(texture)
 	if textures.is_empty():
 		textures = PlaceholderFactory.make_character_frames(4)
-	var frames := SpriteFrames.new()
+	var frames: SpriteFrames = SpriteFrames.new()
 	frames.add_animation("loop")
 	frames.set_animation_speed("loop", fps)
 	frames.set_animation_loop("loop", true)
