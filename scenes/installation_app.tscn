@@ -1,45 +1,45 @@
-[gd_scene format=3 uid="uid://65qb3ecjbpkc"]
+[gd_scene load_steps=4 format=3 uid="uid://dnuq2sd4fbt7w"]
 
-[ext_resource type="Script" uid="uid://dhhh2boura6ta" path="res://scripts/core/installation_app.gd" id="1"]
-[ext_resource type="Script" uid="uid://b8rp0gqj81ctq" path="res://scripts/left/left_stage.gd" id="2"]
-[ext_resource type="Script" uid="uid://bgdb0b6utje74" path="res://scripts/right/right_stage.gd" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/left_main_menu.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/right_display_shared.tscn" id="2"]
+[ext_resource type="Script" path="res://scripts/installation_app.gd" id="3"]
 
-[node name="InstallationApp" type="Control" unique_id=212139146]
+[node name="InstallationApp" type="Control" unique_id=1095347872]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("1")
+anchors_preset = 0
+offset_right = 3840.0
+offset_bottom = 1080.0
+script = ExtResource("3")
 
-[node name="LeftViewportContainer" type="SubViewportContainer" parent="." unique_id=1414110664]
+[node name="LeftScreenHost" type="SubViewportContainer" parent="." unique_id=670217946]
 layout_mode = 0
-offset_left = -324.0
-offset_top = -881.0
-offset_right = 1596.0
-offset_bottom = 199.0
+offset_right = 1920.0
+offset_bottom = 1080.0
 stretch = true
 
-[node name="LeftViewport" type="SubViewport" parent="LeftViewportContainer" unique_id=455312897]
-handle_input_locally = false
+[node name="LeftScreenViewport" type="SubViewport" parent="LeftScreenHost" unique_id=379680633]
+disable_3d = true
+handle_input_locally = true
 size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
-[node name="LeftViewport#LeftStage" type="Node2D" parent="." unique_id=1364587805]
-script = ExtResource("2")
+[node name="LeftMainMenu" parent="LeftScreenHost/LeftScreenViewport" unique_id=1046192873 instance=ExtResource("1")]
+layout_mode = 3
+anchors_preset = 0
 
-[node name="RightViewportContainer" type="SubViewportContainer" parent="." unique_id=1137549445]
+[node name="RightScreenHost" type="SubViewportContainer" parent="." unique_id=1696577519]
 layout_mode = 0
 offset_left = 1920.0
 offset_right = 3840.0
 offset_bottom = 1080.0
 stretch = true
 
-[node name="RightViewport" type="SubViewport" parent="RightViewportContainer" unique_id=1119458407]
-handle_input_locally = false
+[node name="RightScreenViewport" type="SubViewport" parent="RightScreenHost" unique_id=71627717]
+disable_3d = true
+handle_input_locally = true
 size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
-[node name="RightViewport#RightStage" type="Node2D" parent="." unique_id=1498172390]
-script = ExtResource("3")
+[node name="RightDisplayShared" parent="RightScreenHost/RightScreenViewport" unique_id=944185615 instance=ExtResource("2")]
+layout_mode = 3
+anchors_preset = 0

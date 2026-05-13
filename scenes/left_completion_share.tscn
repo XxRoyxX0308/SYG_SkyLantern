@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://cgfpt4cacvkfh"]
+
+[ext_resource type="Texture2D" uid="uid://cc0hf4tqda415" path="res://assets/backgrounds/bg_left_03.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://xpm43sl3rxmv" path="res://assets/buttons/layer3/home_normal.svg" id="2"]
+[ext_resource type="Texture2D" uid="uid://d0jgybkvwtsfl" path="res://assets/buttons/layer3/home_pressed.svg" id="3"]
+[ext_resource type="Texture2D" uid="uid://bm8mpp7lcmtyl" path="res://assets/buttons/layer3/capture_normal.svg" id="4"]
+[ext_resource type="Texture2D" uid="uid://ckhcdyhij7wf5" path="res://assets/buttons/layer3/capture_pressed.svg" id="5"]
+[ext_resource type="Script" uid="uid://dg4jw6qgk7rq1" path="res://scripts/left_completion_share.gd" id="6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vs4m8"]
+
+[node name="LeftCompletionShare" type="Control" unique_id=1945631151]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+script = ExtResource("6")
+
+[node name="Background" type="TextureRect" parent="." unique_id=461335697]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+texture = ExtResource("1")
+
+[node name="QRCodeDisplay" type="Panel" parent="." unique_id=732842996]
+layout_mode = 0
+offset_left = 1016.0
+offset_top = 163.0
+offset_right = 1636.0
+offset_bottom = 783.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_vs4m8")
+
+[node name="QRCodeGuide" type="ColorRect" parent="QRCodeDisplay" unique_id=47857954]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(1, 1, 1, 0.14)
+
+[node name="QRCodeTexture" type="TextureRect" parent="QRCodeDisplay" unique_id=1083112869]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 32.0
+offset_top = 32.0
+offset_right = -32.0
+offset_bottom = -32.0
+
+[node name="FunctionalButtons" type="HBoxContainer" parent="." unique_id=374530132]
+layout_mode = 0
+offset_left = 986.0
+offset_top = 878.0
+offset_right = 1806.0
+offset_bottom = 994.0
+theme_override_constants/separation = 36
+
+[node name="BackToMenuButton" type="TextureButton" parent="FunctionalButtons" unique_id=797114749]
+layout_mode = 2
+texture_normal = ExtResource("2")
+texture_pressed = ExtResource("3")
+
+[node name="CaptureButton" type="TextureButton" parent="FunctionalButtons" unique_id=1126177838]
+layout_mode = 2
+texture_normal = ExtResource("4")
+texture_pressed = ExtResource("5")
