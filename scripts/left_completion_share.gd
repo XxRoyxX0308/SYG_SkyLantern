@@ -1,7 +1,6 @@
 extends Control
 
-const QR_GRID_SIZE := 29
-const QR_CELL_SIZE := 14
+const QR_IMAGE_URL_TEMPLATE := "https://api.qrserver.com/v1/create-qr-code/?size=512x512&format=png&data=%s"
 
 signal home_requested
 signal screenshot_requested
@@ -10,20 +9,29 @@ signal screenshot_requested
 @onready var capture_button: TextureButton = $FunctionalButtons/CaptureButton
 @onready var qr_texture_rect: TextureRect = $QRCodeDisplay/QRCodeTexture
 
+var _qr_request: HTTPRequest = null
+var _pending_qr_url := ""
+
 
 func _ready() -> void:
+	_qr_request = HTTPRequest.new()
+	add_child(_qr_request)
+	_qr_request.request_completed.connect(_on_qr_request_completed)
 	home_button.pressed.connect(_on_home_pressed)
 	capture_button.pressed.connect(_on_capture_pressed)
 	show_qr_url("")
 
 
 func show_qr_url(url: String) -> void:
+	_pending_qr_url = url
 	if url.is_empty():
 		qr_texture_rect.texture = null
 		return
 
-	print("Mock QR URL:", url)
-	qr_texture_rect.texture = _build_qr_texture(url)
+	var request_error: Error = _qr_request.request(QR_IMAGE_URL_TEMPLATE % url.uri_encode())
+	if request_error != OK:
+		push_warning("Failed to request QR image: %s" % error_string(request_error))
+		qr_texture_rect.texture = null
 
 
 func _on_home_pressed() -> void:
@@ -34,45 +42,21 @@ func _on_capture_pressed() -> void:
 	screenshot_requested.emit()
 
 
-func _build_qr_texture(url: String) -> Texture2D:
-	var image_size: int = QR_GRID_SIZE * QR_CELL_SIZE
-	var image := Image.create(image_size, image_size, false, Image.FORMAT_RGBA8)
-	image.fill(Color.WHITE)
+func _on_qr_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
+	if _pending_qr_url.is_empty():
+		qr_texture_rect.texture = null
+		return
 
-	_draw_finder_pattern(image, Vector2i(0, 0))
-	_draw_finder_pattern(image, Vector2i(QR_GRID_SIZE - 7, 0))
-	_draw_finder_pattern(image, Vector2i(0, QR_GRID_SIZE - 7))
+	if result != HTTPRequest.RESULT_SUCCESS or response_code != 200:
+		push_warning("Failed to download QR image with result %s and response code %s." % [result, response_code])
+		qr_texture_rect.texture = null
+		return
 
-	var seed: int = abs(url.hash())
-	for y in range(QR_GRID_SIZE):
-		for x in range(QR_GRID_SIZE):
-			if _is_finder_cell(x, y):
-				continue
-			seed = int((seed * 1103515245 + 12345) & 0x7fffffff)
-			if seed % 3 == 0:
-				_fill_cell(image, x, y, Color.BLACK)
+	var qr_image := Image.new()
+	var load_error: Error = qr_image.load_png_from_buffer(body)
+	if load_error != OK:
+		push_warning("Failed to parse QR PNG: %s" % error_string(load_error))
+		qr_texture_rect.texture = null
+		return
 
-	return ImageTexture.create_from_image(image)
-
-
-func _draw_finder_pattern(image: Image, origin: Vector2i) -> void:
-	for y in range(7):
-		for x in range(7):
-			var is_border := x == 0 or x == 6 or y == 0 or y == 6
-			var is_center := x >= 2 and x <= 4 and y >= 2 and y <= 4
-			if is_border or is_center:
-				_fill_cell(image, origin.x + x, origin.y + y, Color.BLACK)
-
-
-func _is_finder_cell(x: int, y: int) -> bool:
-	return (x < 7 and y < 7) \
-		or (x >= QR_GRID_SIZE - 7 and y < 7) \
-		or (x < 7 and y >= QR_GRID_SIZE - 7)
-
-
-func _fill_cell(image: Image, cell_x: int, cell_y: int, color: Color) -> void:
-	var start_x := cell_x * QR_CELL_SIZE
-	var start_y := cell_y * QR_CELL_SIZE
-	for y in range(start_y, start_y + QR_CELL_SIZE):
-		for x in range(start_x, start_x + QR_CELL_SIZE):
-			image.set_pixel(x, y, color)
+	qr_texture_rect.texture = ImageTexture.create_from_image(qr_image)

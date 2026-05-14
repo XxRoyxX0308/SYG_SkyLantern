@@ -95,7 +95,6 @@ func spawn_lantern(drawing_texture: Texture2D, style_id: int) -> void:
 
 func capture_view_image() -> Image:
 	var image := get_viewport().get_texture().get_image()
-	image.flip_y()
 	return image
 
 
