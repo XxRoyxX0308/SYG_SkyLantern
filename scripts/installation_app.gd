@@ -84,7 +84,6 @@ func _on_home_requested() -> void:
 func _reset_application() -> void:
 	selected_style_id = 0
 	latest_drawing_texture = null
-	right_display.reset_display()
 
 
 func _save_screenshot(image: Image) -> String:
