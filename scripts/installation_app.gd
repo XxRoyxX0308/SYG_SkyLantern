@@ -59,6 +59,7 @@ func _wire_left_scene() -> void:
 			current_left_scene.home_requested.connect(_on_home_requested)
 			current_left_scene.screenshot_requested.connect(_on_screenshot_requested)
 			current_left_scene.show_qr_url(latest_uploaded_url)
+			_set_capture_loading_on_complete_scene(_upload_in_flight)
 
 
 func _on_main_menu_confirm(style_id: int) -> void:
@@ -78,22 +79,28 @@ func _on_drawing_confirm(drawing_texture: Texture2D) -> void:
 func _on_screenshot_requested() -> void:
 	if _upload_in_flight:
 		push_warning("Screenshot upload already in progress.")
+		_set_capture_loading_on_complete_scene(true)
 		return
+
+	_set_capture_loading_on_complete_scene(true)
 
 	var screenshot_image: Image = right_display.capture_view_image()
 	if screenshot_image == null:
 		push_warning("Failed to capture right screen screenshot.")
+		_set_capture_loading_on_complete_scene(false)
 		return
 
 	var screenshot_path := _save_screenshot(screenshot_image)
 	var api_key := _load_imgbb_api_key()
 	if api_key.is_empty():
 		push_warning("imgbb API key is missing.")
+		_set_capture_loading_on_complete_scene(false)
 		return
 
 	var upload_payload := _build_imgbb_payload(screenshot_path, screenshot_path.get_file().get_basename(), api_key)
 	if upload_payload.is_empty():
 		push_warning("Failed to build screenshot upload payload.")
+		_set_capture_loading_on_complete_scene(false)
 		return
 
 	latest_uploaded_url = ""
@@ -109,6 +116,7 @@ func _on_screenshot_requested() -> void:
 	)
 	if request_error != OK:
 		_upload_in_flight = false
+		_set_capture_loading_on_complete_scene(false)
 		push_warning("Failed to start screenshot upload request: %s" % error_string(request_error))
 
 
@@ -201,24 +209,36 @@ func _on_upload_request_completed(result: int, response_code: int, _headers: Pac
 	_upload_in_flight = false
 	if result != HTTPRequest.RESULT_SUCCESS or response_code != 200:
 		push_warning("Screenshot upload failed with result %s and response code %s." % [result, response_code])
+		_set_capture_loading_on_complete_scene(false)
 		return
 
 	var response_text: String = body.get_string_from_utf8()
 	var response_data: Variant = JSON.parse_string(response_text)
 	if typeof(response_data) != TYPE_DICTIONARY:
 		push_warning("Unexpected imgbb response: %s" % response_text)
+		_set_capture_loading_on_complete_scene(false)
 		return
 
 	var response_dictionary: Dictionary = response_data
 	if not bool(response_dictionary.get("success", false)):
 		push_warning("imgbb rejected the screenshot upload: %s" % response_text)
+		_set_capture_loading_on_complete_scene(false)
 		return
 
 	var data: Dictionary = response_dictionary.get("data", {})
 	latest_uploaded_url = str(data.get("url_viewer", data.get("url", "")))
 	if latest_uploaded_url.is_empty():
 		push_warning("imgbb response did not contain a usable URL.")
+		_set_capture_loading_on_complete_scene(false)
 		return
 
 	if current_state == AppState.COMPLETE and is_instance_valid(current_left_scene):
 		current_left_scene.show_qr_url(latest_uploaded_url)
+
+
+func _set_capture_loading_on_complete_scene(is_loading: bool) -> void:
+	if current_state != AppState.COMPLETE or not is_instance_valid(current_left_scene):
+		return
+
+	if current_left_scene.has_method("set_capture_loading"):
+		current_left_scene.set_capture_loading(is_loading)
